@@ -110,14 +110,6 @@
     .mission-brief .eyebrow { font-size: 9px; }
     .mission-brief h3 { margin: 10px 0 7px; font: 700 32px/.96 var(--display); text-transform: uppercase; }
     .mission-brief p { max-width: 640px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
-    .edit-site-button { position: fixed; z-index: 15; right: 18px; bottom: 18px; display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,255,255,.3); background: rgba(17,17,20,.94); color: white; font-size: 10px; font-weight: 700; letter-spacing: .5px; cursor: pointer; backdrop-filter: blur(10px); }
-    .edit-site-button:hover { border-color: var(--yellow); color: var(--yellow); }
-    .edit-site-button i { width: 15px; height: 15px; }
-    body.editing [data-editable] { outline: 1px dashed var(--yellow); outline-offset: 4px; cursor: text; }
-    body.editing [data-editable]:focus { outline: 2px solid var(--yellow); background: rgba(243,197,72,.08); }
-    .edit-hint { position: fixed; z-index: 14; right: 18px; bottom: 70px; max-width: 245px; padding: 12px 14px; background: var(--paper); color: var(--ink); font-size: 10px; line-height: 1.55; box-shadow: 0 8px 28px rgba(0,0,0,.35); }
-    .edit-hint[hidden] { display: none; }
-    .edit-hint button { display: block; margin-top: 8px; padding: 0; border: 0; background: none; color: #a32129; font: 700 10px var(--body); text-decoration: underline; cursor: pointer; }
     .highlights { background: #19191c; position: relative; overflow: hidden; }
     .highlights::before { content: 'ASSEMBLE'; position: absolute; right: -25px; top: 30px; color: rgba(255,255,255,.025); font: 900 200px/.8 var(--display); pointer-events: none; }
     .tab-list { display: flex; gap: 25px; border-bottom: 1px solid var(--line); }
@@ -324,8 +316,6 @@
       </form>
     </section>
   </div>
-  <button class="edit-site-button" type="button" aria-pressed="false"><i data-lucide="pencil"></i><span>Edit this page</span></button>
-  <aside class="edit-hint" hidden>Edit mode: click outlined text to change it. Your edits stay in this browser.<button class="reset-edits" type="button">Reset page text</button></aside>
   <script>
     if (window.lucide) lucide.createIcons();
 
@@ -384,39 +374,6 @@
       missionCopy.textContent = prompt.copy;
       document.querySelector('#project-brief').animate([{ opacity: .55, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 360, easing: 'ease-out' });
     }));
-
-    const editButton = document.querySelector('.edit-site-button');
-    const editHint = document.querySelector('.edit-hint');
-    const editableElements = [...document.querySelectorAll('[data-editable]')];
-    const defaultCopy = new Map(editableElements.map(element => [element.dataset.editable, element.textContent]));
-    const copyStorageKey = 'gfg-campus-assemble-copy-v1';
-    function readSavedCopy() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(copyStorageKey) || '{}');
-        editableElements.forEach(element => {
-          if (typeof saved[element.dataset.editable] === 'string') element.textContent = saved[element.dataset.editable];
-        });
-      } catch { /* Local storage may be unavailable for local files. */ }
-    }
-    function saveCopy() {
-      const saved = Object.fromEntries(editableElements.map(element => [element.dataset.editable, element.textContent]));
-      try { localStorage.setItem(copyStorageKey, JSON.stringify(saved)); } catch { /* Editing still works for this page view. */ }
-    }
-    readSavedCopy();
-    editButton.addEventListener('click', () => {
-      const editing = document.body.classList.toggle('editing');
-      editButton.setAttribute('aria-pressed', String(editing));
-      editButton.querySelector('span').textContent = editing ? 'Done editing' : 'Edit this page';
-      editHint.hidden = !editing;
-      editableElements.forEach(element => { element.contentEditable = String(editing); });
-      if (editing) editableElements[0].focus();
-      else saveCopy();
-    });
-    editableElements.forEach(element => element.addEventListener('input', saveCopy));
-    document.querySelector('.reset-edits').addEventListener('click', () => {
-      editableElements.forEach(element => { element.textContent = defaultCopy.get(element.dataset.editable); });
-      try { localStorage.removeItem(copyStorageKey); } catch { /* Ignore unavailable local storage. */ }
-    });
 
     const backdrop = document.querySelector('.modal-backdrop');
     const closeButton = document.querySelector('.modal-close');
