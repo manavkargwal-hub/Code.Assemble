@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101012">
+  <meta name="description" content="A Marvel-inspired student event by the GeeksForGeeks Student Chapter at Bennett University.">
+  <title>Campus Assemble | GeeksForGeeks Bennett University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #101012;
+      --paper: #f2efe9;
+      --muted: #aaa7a1;
+      --red: #e52d36;
+      --yellow: #f3c548;
+      --line: rgba(242, 239, 233, .16);
+      --display: 'Barlow Condensed', Impact, sans-serif;
+      --body: 'DM Sans', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--ink); color: var(--paper); font-family: var(--body); }
+    body.modal-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    .topline { height: 4px; background: linear-gradient(90deg, var(--red) 0 42%, var(--yellow) 42% 58%, var(--red) 58%); }
+    .nav { position: absolute; z-index: 5; top: 4px; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 24px 6.2vw; border-bottom: 1px solid rgba(255,255,255,.14); }
+    .brand { display: flex; align-items: center; gap: 10px; font: 800 19px var(--display); letter-spacing: 1.2px; }
+    .brand-mark { display: grid; place-items: center; width: 32px; height: 32px; color: var(--ink); background: var(--red); clip-path: polygon(18% 0, 82% 0, 100% 18%, 100% 82%, 82% 100%, 18% 100%, 0 82%, 0 18%); }
+    .brand-mark i { width: 18px; height: 18px; stroke-width: 2.6; }
+    .nav-links { display: flex; align-items: center; gap: 34px; color: rgba(255,255,255,.77); font-size: 12px; font-weight: 600; letter-spacing: .4px; }
+    .nav-links a:not(.button-link):hover { color: var(--yellow); }
+    .button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 11px; border: 0; padding: 0 23px; background: var(--red); color: white; font-size: 12px; font-weight: 700; letter-spacing: .9px; text-transform: uppercase; cursor: pointer; transition: background .2s, transform .2s; }
+    .button:hover { background: #f13f47; transform: translateY(-2px); }
+    .button i { width: 16px; height: 16px; }
+    .button-outline { border: 1px solid rgba(255,255,255,.55); background: transparent; }
+    .button-outline:hover { background: white; color: var(--ink); }
+    .menu-button { display: none; border: 0; background: transparent; padding: 8px; cursor: pointer; }
+    .hero { min-height: 760px; height: 100svh; max-height: 1040px; position: relative; display: flex; align-items: center; overflow: hidden; isolation: isolate; background: #171719; }
+    .hero-photo { position: absolute; z-index: -3; inset: 0; background-image: url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2400&q=88'); background-size: cover; background-position: center 48%; transform: scale(1.035); animation: arrival 1.4s cubic-bezier(.2,.75,.2,1) both, drift 24s ease-in-out 1.4s infinite alternate; }
+    .hero::before { content: ''; position: absolute; z-index: -2; inset: 0; background: linear-gradient(90deg, rgba(9,9,11,.93) 0%, rgba(9,9,11,.67) 42%, rgba(9,9,11,.09) 100%), linear-gradient(0deg, rgba(16,16,18,.98) 0%, transparent 38%, rgba(0,0,0,.28) 100%); }
+    .hero::after { content: ''; position: absolute; z-index: -1; inset: 0; opacity: .15; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,.8) .65px, transparent .65px); background-size: 5px 5px; mask-image: linear-gradient(90deg, #000, transparent 85%); }
+    .hero-content { width: min(680px, 88vw); margin: 72px 0 0 11.2vw; animation: rise .8s .12s both; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--yellow); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    .eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--red); }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero h1 { max-width: 670px; margin: 19px 0 18px; font: 900 clamp(72px, 11vw, 148px)/.78 var(--display); letter-spacing: 0; text-transform: uppercase; }
+    .hero h1 span { display: block; color: var(--red); }
+    .hero-copy { max-width: 440px; margin: 27px 0 28px; color: rgba(255,255,255,.78); font-size: 15px; line-height: 1.7; }
+    .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .hero-meta { margin-top: 47px; display: flex; align-items: center; gap: 25px; color: rgba(255,255,255,.72); font-size: 11px; font-weight: 600; letter-spacing: .7px; text-transform: uppercase; }
+    .hero-meta span { display: flex; align-items: center; gap: 8px; }
+    .hero-meta i { width: 15px; height: 15px; color: var(--yellow); }
+    .interactive-text { display: inline-block; transition: color .22s ease, transform .22s ease, text-shadow .22s ease; transform-origin: left center; }
+    .interactive-text:hover { color: var(--yellow); transform: translateX(5px); text-shadow: 0 0 22px rgba(243,197,72,.35); }
+    .hero h1 .interactive-text:hover { color: white; }
+    .heroes h2, .highlights h2, .schedule h2, .highlight-card h3, .schedule-row strong, .hero-copy { transition: color .22s ease, transform .22s ease; transform-origin: left center; }
+    .heroes h2:hover, .highlights h2:hover, .schedule h2:hover, .highlight-card h3:hover, .schedule-row strong:hover, .hero-copy:hover { color: var(--yellow); transform: translateX(4px); }
+    .scroll-cue { position: absolute; right: 6.2vw; bottom: 48px; display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,.7); font-size: 9px; letter-spacing: 1.6px; text-transform: uppercase; writing-mode: vertical-rl; }
+    .scroll-cue::after { content: ''; width: 1px; height: 42px; background: var(--red); }
+    .ticker { overflow: hidden; padding: 15px 0; background: var(--red); color: white; }
+    .ticker-track { width: max-content; display: flex; animation: ticker 32s linear infinite; }
+    .ticker-item { display: flex; align-items: center; gap: 22px; padding-right: 22px; font: 700 15px var(--display); letter-spacing: 1.2px; text-transform: uppercase; white-space: nowrap; }
+    .ticker-item i { width: 13px; height: 13px; color: var(--yellow); fill: var(--yellow); }
+    .section { padding: 112px 10vw; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 35px; margin-bottom: 47px; }
+    .section h2 { margin: 13px 0 0; font: 800 clamp(48px, 7vw, 82px)/.9 var(--display); letter-spacing: 0; text-transform: uppercase; }
+    .section-intro { max-width: 340px; margin: 0 0 5px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .event-section { background: var(--paper); color: var(--ink); }
+    .event-section .eyebrow { color: #9d252c; }
+    .event-section .eyebrow::before { background: var(--red); }
+    .event-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid rgba(16,16,18,.2); border-bottom: 1px solid rgba(16,16,18,.2); }
+    .event-detail { min-height: 160px; padding: 29px 24px 26px 0; border-right: 1px solid rgba(16,16,18,.2); }
+    .event-detail + .event-detail { padding-left: 28px; }
+    .event-detail:last-child { border: 0; }
+    .event-detail .detail-label { display: block; margin-bottom: 19px; color: #77736d; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .event-detail strong { display: block; font: 700 27px/1.05 var(--display); letter-spacing: .3px; text-transform: uppercase; }
+    .event-detail small { display: block; margin-top: 8px; color: #68645f; font-size: 12px; }
+    .countdown-wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 34px; }
+    .countdown-caption { color: #6a6660; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+    .countdown { display: flex; align-items: baseline; gap: 8px; font: 700 27px var(--display); }
+    .countdown span { display: flex; align-items: baseline; gap: 4px; }
+    .countdown em { color: #77736d; font: 600 9px var(--body); letter-spacing: .5px; text-transform: uppercase; }
+    .heroes { background: #111114; position: relative; overflow: hidden; }
+    .heroes::after { content: '01 / 03'; position: absolute; right: 5vw; top: 38px; color: rgba(255,255,255,.055); font: 900 clamp(90px, 16vw, 220px)/.8 var(--display); pointer-events: none; }
+    .hero-selector { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 40px; }
+    .hero-card { position: relative; min-height: 340px; overflow: hidden; display: flex; flex-direction: column; justify-content: end; text-align: left; padding: 25px; isolation: isolate; border: 1px solid rgba(255,255,255,.14); background: #202024; cursor: pointer; }
+    .hero-card::before { content: ''; position: absolute; z-index: -2; inset: 0; background: var(--hero-image) center/cover; filter: saturate(.72); transition: transform .6s, filter .6s; }
+    .hero-card::after { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(0deg, rgba(8,8,10,.96), rgba(8,8,10,.06) 82%); transition: background .35s; }
+    .hero-card:hover::before, .hero-card:focus-visible::before, .hero-card[aria-pressed="true"]::before { transform: scale(1.06); filter: saturate(1.1); }
+    .hero-card[aria-pressed="true"] { border-color: var(--yellow); }
+    .hero-card:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+    .hero-card:nth-child(1) { --hero-image: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?auto=format&fit=crop&w=1000&q=85'); }
+    .hero-card:nth-child(2) { --hero-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=85'); }
+    .hero-card:nth-child(3) { --hero-image: url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1000&q=85'); }
+    .hero-card-number { position: absolute; top: 17px; left: 19px; color: var(--yellow); font: 700 18px var(--display); }
+    .hero-card-prompt { position: absolute; top: 17px; right: 17px; display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: rgba(12,12,14,.72); color: white; font-size: 9px; letter-spacing: .6px; text-transform: uppercase; opacity: 0; transform: translateY(-5px); transition: opacity .2s, transform .2s; }
+    .hero-card:hover .hero-card-prompt, .hero-card:focus-visible .hero-card-prompt, .hero-card[aria-pressed="true"] .hero-card-prompt { opacity: 1; transform: none; }
+    .hero-card-prompt i { width: 13px; height: 13px; color: var(--yellow); }
+    .hero-card h3 { margin: 0 0 7px; font: 800 34px/.9 var(--display); text-transform: uppercase; }
+    .hero-card small { color: var(--yellow); font-size: 9px; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
+    .mission-brief { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 28px; margin-top: 15px; padding: 28px 30px; border-left: 2px solid var(--red); background: #1b1b1f; }
+    .mission-brief .eyebrow { font-size: 9px; }
+    .mission-brief h3 { margin: 10px 0 7px; font: 700 32px/.96 var(--display); text-transform: uppercase; }
+    .mission-brief p { max-width: 640px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .edit-site-button { position: fixed; z-index: 15; right: 18px; bottom: 18px; display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 14px; border: 1px solid rgba(255,255,255,.3); background: rgba(17,17,20,.94); color: white; font-size: 10px; font-weight: 700; letter-spacing: .5px; cursor: pointer; backdrop-filter: blur(10px); }
+    .edit-site-button:hover { border-color: var(--yellow); color: var(--yellow); }
+    .edit-site-button i { width: 15px; height: 15px; }
+    body.editing [data-editable] { outline: 1px dashed var(--yellow); outline-offset: 4px; cursor: text; }
+    body.editing [data-editable]:focus { outline: 2px solid var(--yellow); background: rgba(243,197,72,.08); }
+    .edit-hint { position: fixed; z-index: 14; right: 18px; bottom: 70px; max-width: 245px; padding: 12px 14px; background: var(--paper); color: var(--ink); font-size: 10px; line-height: 1.55; box-shadow: 0 8px 28px rgba(0,0,0,.35); }
+    .edit-hint[hidden] { display: none; }
+    .edit-hint button { display: block; margin-top: 8px; padding: 0; border: 0; background: none; color: #a32129; font: 700 10px var(--body); text-decoration: underline; cursor: pointer; }
+    .highlights { background: #19191c; position: relative; overflow: hidden; }
+    .highlights::before { content: 'ASSEMBLE'; position: absolute; right: -25px; top: 30px; color: rgba(255,255,255,.025); font: 900 200px/.8 var(--display); pointer-events: none; }
+    .tab-list { display: flex; gap: 25px; border-bottom: 1px solid var(--line); }
+    .tab { position: relative; border: 0; padding: 0 0 14px; background: transparent; color: #88858a; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+    .tab[aria-selected="true"] { color: var(--paper); }
+    .tab[aria-selected="true"]::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--red); }
+    .highlight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 24px; }
+    .highlight-card { position: relative; min-height: 302px; overflow: hidden; display: flex; flex-direction: column; justify-content: end; padding: 25px; background: #29292d; isolation: isolate; }
+    .highlight-card::before { content: ''; position: absolute; z-index: -2; inset: 0; background: var(--card-image) center/cover; transition: transform .55s; }
+    .highlight-card:hover::before { transform: scale(1.06); }
+    .highlight-card::after { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(0deg, rgba(7,7,9,.92), rgba(7,7,9,.04) 90%); }
+    .card-no { position: absolute; top: 18px; left: 20px; color: var(--yellow); font: 700 18px var(--display); }
+    .card-icon { position: absolute; top: 18px; right: 19px; display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; background: rgba(0,0,0,.18); }
+    .card-icon i { width: 16px; height: 16px; }
+    .highlight-card h3 { margin: 0 0 7px; font: 700 29px/.95 var(--display); text-transform: uppercase; }
+    .highlight-card p { max-width: 250px; margin: 0; color: rgba(255,255,255,.72); font-size: 11px; line-height: 1.6; }
+    .highlight-card:nth-child(1) { --card-image: url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=82'); }
+    .highlight-card:nth-child(2) { --card-image: url('https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=900&q=82'); }
+    .highlight-card:nth-child(3) { --card-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=82'); }
+    .schedule { padding-top: 0; background: #19191c; }
+    .schedule-head { border-top: 1px solid var(--line); padding-top: 66px; }
+    .schedule-content { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; margin-top: 36px; }
+    .schedule-day { display: none; }
+    .schedule-day.active { display: block; animation: rise .35s both; }
+    .schedule-row { display: grid; grid-template-columns: 85px 1fr auto; align-items: center; gap: 18px; min-height: 84px; border-bottom: 1px solid var(--line); }
+    .schedule-time { color: var(--yellow); font: 700 17px var(--display); }
+    .schedule-row strong { display: block; font: 600 17px var(--display); letter-spacing: .3px; text-transform: uppercase; }
+    .schedule-row small { display: block; margin-top: 4px; color: #8f8c91; font-size: 10px; }
+    .schedule-row > i { width: 15px; height: 15px; color: #8f8c91; }
+    .schedule-aside { align-self: center; padding: 30px; border-left: 2px solid var(--red); background: #222225; }
+    .schedule-aside .eyebrow { font-size: 9px; }
+    .schedule-aside h3 { margin: 14px 0 10px; font: 700 33px/.95 var(--display); text-transform: uppercase; }
+    .schedule-aside p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .cta { position: relative; overflow: hidden; padding: 90px 10vw; background: var(--red); isolation: isolate; }
+    .cta::before { content: ''; position: absolute; z-index: -1; inset: 0; opacity: .15; background-image: radial-gradient(rgba(0,0,0,.7) .7px, transparent .7px); background-size: 5px 5px; }
+    .cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 35px; max-width: 1120px; margin: 0 auto; }
+    .cta .eyebrow { color: #ffe190; }
+    .cta .eyebrow::before { background: white; }
+    .cta h2 { max-width: 600px; margin: 15px 0 0; font: 900 clamp(52px, 8vw, 94px)/.84 var(--display); text-transform: uppercase; }
+    .cta .button { flex: 0 0 auto; background: var(--paper); color: var(--ink); }
+    .cta .button:hover { background: white; }
+    footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 28px 6.2vw; color: #87848a; font-size: 10px; }
+    .footer-note { max-width: 570px; text-align: right; line-height: 1.6; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .modal-backdrop { position: fixed; z-index: 20; inset: 0; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,.78); backdrop-filter: blur(7px); }
+    .modal-backdrop.open { display: flex; animation: fade .2s both; }
+    .modal { position: relative; width: min(480px, 100%); max-height: min(90vh, 760px); overflow: auto; padding: 38px; background: var(--paper); color: var(--ink); animation: rise .28s both; }
+    .modal-close { position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid rgba(0,0,0,.15); background: transparent; cursor: pointer; }
+    .modal-close i { width: 18px; height: 18px; }
+    .modal .eyebrow { color: #9d252c; }
+    .modal .eyebrow::before { background: var(--red); }
+    .modal h2 { margin: 14px 0 8px; font: 800 47px/.9 var(--display); text-transform: uppercase; }
+    .modal-copy { margin-bottom: 25px; color: #6e6a64; font-size: 12px; line-height: 1.6; }
+    .form-field { display: grid; gap: 7px; margin-bottom: 15px; }
+    .form-field label { font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
+    .form-field input, .form-field select { width: 100%; min-height: 46px; border: 1px solid #c9c5bd; border-radius: 0; padding: 0 12px; background: white; color: var(--ink); outline-color: var(--red); font-size: 13px; }
+    .modal .button { width: 100%; margin-top: 5px; }
+    .form-message { display: none; margin: 15px 0 0; padding: 12px; background: #e3efdc; color: #24411d; font-size: 12px; line-height: 1.5; }
+    .form-message.show { display: block; }
+    @keyframes arrival { from { opacity: .55; transform: scale(1.09); } to { opacity: 1; transform: scale(1.035); } }
+    @keyframes drift { from { transform: scale(1.035) translate3d(0,0,0); } to { transform: scale(1.08) translate3d(-.5%,.4%,0); } }
+    @keyframes rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes ticker { to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+    @media (max-width: 760px) {
+      .nav { padding: 17px 6vw; }
+      .nav-links { position: absolute; top: 70px; left: 0; right: 0; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 6vw 19px; background: rgba(16,16,18,.97); border-bottom: 1px solid var(--line); }
+      .nav-links.open { display: flex; }
+      .nav-links a:not(.button-link) { padding: 13px 0; border-bottom: 1px solid var(--line); }
+      .nav-links .button { margin-top: 14px; }
+      .menu-button { display: block; }
+      .hero { min-height: 720px; height: 94svh; max-height: 900px; }
+      .hero-photo { background-position: 57% center; }
+      .hero::before { background: linear-gradient(90deg, rgba(9,9,11,.84), rgba(9,9,11,.3)), linear-gradient(0deg, rgba(16,16,18,.98), transparent 70%); }
+      .hero-content { margin: 74px 0 0 7vw; }
+      .hero h1 { font-size: clamp(72px, 17vw, 118px); }
+      .hero-copy { max-width: 365px; font-size: 13px; }
+      .hero-meta { gap: 14px; flex-wrap: wrap; margin-top: 34px; font-size: 9px; }
+      .scroll-cue { display: none; }
+      .section { padding: 80px 7vw; }
+      .section-head { align-items: start; flex-direction: column; gap: 19px; margin-bottom: 34px; }
+      .section-intro { max-width: 460px; }
+      .hero-selector { grid-template-columns: 1fr; gap: 10px; margin-top: 28px; }
+      .hero-card { min-height: 225px; }
+      .hero-card-prompt { opacity: 1; transform: none; }
+      .mission-brief { grid-template-columns: 1fr; gap: 18px; padding: 23px; }
+      .heroes::after { top: 25px; right: 4vw; }
+      .event-grid { grid-template-columns: 1fr 1fr; }
+      .event-detail { min-height: 142px; padding: 22px 14px 20px 0; border-bottom: 1px solid rgba(16,16,18,.2); }
+      .event-detail + .event-detail { padding-left: 18px; }
+      .event-detail:nth-child(2) { border-right: 0; }
+      .event-detail:nth-child(3) { border-bottom: 0; }
+      .event-detail:last-child { padding-left: 18px; }
+      .event-detail strong { font-size: 23px; }
+      .countdown-wrap { align-items: flex-start; flex-direction: column; gap: 11px; }
+      .countdown { font-size: 24px; }
+      .highlights::before { font-size: 120px; top: 30px; }
+      .highlight-grid { grid-template-columns: 1fr; }
+      .highlight-card { min-height: 275px; }
+      .schedule-content { grid-template-columns: 1fr; gap: 28px; }
+      .schedule-aside { padding: 24px; }
+      .schedule-row { grid-template-columns: 64px 1fr auto; gap: 11px; }
+      .schedule-row strong { font-size: 15px; }
+      .cta { padding: 72px 7vw; }
+      .cta-inner { align-items: flex-start; flex-direction: column; }
+      footer { align-items: flex-start; flex-direction: column; padding: 26px 7vw; }
+      .footer-note { text-align: left; }
+      .modal { padding: 32px 24px; }
+    }
+    @media (max-width: 390px) { .hero-actions .button { padding: 0 15px; } .hero-meta { gap: 10px; } .countdown { gap: 5px; font-size: 21px; } }
+  </style>
+</head>
+<body>
+  <div class="topline"></div>
+  <header class="nav">
+    <a class="brand" href="#top" aria-label="Campus Assemble home"><span class="brand-mark"><i data-lucide="zap"></i></span> CAMPUS ASSEMBLE</a>
+    <button class="menu-button" aria-label="Open navigation" aria-expanded="false"><i data-lucide="menu"></i></button>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#event">The Event</a><a href="#heroes">Hero missions</a><a href="#highlights">Experiences</a><a href="#schedule">Event flow</a>
+      <button class="button register-trigger">Get your pass <i data-lucide="arrow-up-right"></i></button>
+    </nav>
+  </header>
+  <main id="top">
+    <section class="hero" aria-label="Campus Assemble event">
+      <div class="hero-photo" role="img" aria-label="Cinematic city lights at night"></div>
+      <div class="hero-content">
+        <div class="eyebrow interactive-text" data-editable="hero-eyebrow">GeeksForGeeks Student Chapter · Bennett University</div>
+        <h1><span class="interactive-text" data-editable="hero-title">Your campus.</span><br><span class="interactive-text" data-editable="hero-accent">Your universe.</span></h1>
+        <p class="hero-copy interactive-text" data-editable="hero-copy">One campus. A thousand origin stories. Step into a cinematic celebration where fandom meets future tech and every student can become the hero of their own build.</p>
+        <div class="hero-actions"><button class="button register-trigger"><span data-editable="hero-cta">Join the mission</span> <i data-lucide="arrow-up-right"></i></button><a class="button button-outline" href="#heroes">Choose your hero <i data-lucide="arrow-down"></i></a></div>
+        <div class="hero-meta"><span><i data-lucide="map-pin"></i> Bennett University · Greater Noida</span><span><i data-lucide="calendar-days"></i> Event date · TBA</span></div>
+      </div>
+      <a class="scroll-cue" href="#event">Scroll to explore</a>
+    </section>
+    <div class="ticker" aria-hidden="true"><div class="ticker-track">
+      <span class="ticker-item">Code like a hero <i data-lucide="sparkles"></i></span><span class="ticker-item">Bennett University <i data-lucide="sparkles"></i></span><span class="ticker-item">Ideas become origin stories <i data-lucide="sparkles"></i></span><span class="ticker-item">Built by the next generation <i data-lucide="sparkles"></i></span>
+      <span class="ticker-item">Code like a hero <i data-lucide="sparkles"></i></span><span class="ticker-item">Bennett University <i data-lucide="sparkles"></i></span><span class="ticker-item">Ideas become origin stories <i data-lucide="sparkles"></i></span><span class="ticker-item">Built by the next generation <i data-lucide="sparkles"></i></span>
+    </div></div>
+    <section class="section event-section" id="event">
+      <div class="section-head reveal"><div><div class="eyebrow interactive-text" data-editable="event-kicker">Your coordinates</div><h2><span class="interactive-text" data-editable="event-title">The next</span><br><span class="interactive-text" data-editable="event-accent">origin story.</span></h2></div><p class="section-intro interactive-text" data-editable="event-copy">A Marvel-inspired campus experience from the GeeksForGeeks Student Chapter. Meet your people, explore bold ideas, and turn a project prompt into something real.</p></div>
+      <div class="event-grid reveal">
+        <div class="event-detail"><span class="detail-label">Hosted by</span><strong data-editable="event-host">GFG Student Chapter</strong><small data-editable="event-organizer">Bennett University</small></div>
+        <div class="event-detail"><span class="detail-label">Where</span><strong data-editable="event-venue">Bennett University</strong><small data-editable="event-location">Greater Noida, Uttar Pradesh</small></div>
+        <div class="event-detail"><span class="detail-label">When</span><strong data-editable="event-date">Date TBA</strong><small data-editable="event-date-note">Watch this space for updates</small></div>
+      </div>
+      <div class="countdown-wrap reveal"><span class="countdown-caption">Mission status</span><div class="countdown"><span><b>TRANSMISSION</b><em>event details incoming</em></span></div></div>
+    </section>
+    <section class="section heroes" id="heroes">
+      <div class="section-head reveal"><div><div class="eyebrow">Pick your origin story</div><h2>Choose your<br>hero. Build.</h2></div><p class="section-intro">Tap a hero to reveal a project prompt. Use it as a starting point, then bring your own powers, ideas, and tech stack.</p></div>
+      <div class="hero-selector reveal" role="group" aria-label="Choose a superhero project prompt">
+        <button class="hero-card" type="button" data-hero="captain" aria-pressed="true"><span class="hero-card-number">01</span><span class="hero-card-prompt"><i data-lucide="mouse-pointer-2"></i> Reveal mission</span><small>Strategy · Resilience</small><h3>Captain America</h3></button>
+        <button class="hero-card" type="button" data-hero="ironman" aria-pressed="false"><span class="hero-card-number">02</span><span class="hero-card-prompt"><i data-lucide="mouse-pointer-2"></i> Reveal mission</span><small>Engineering · AI</small><h3>Iron Man</h3></button>
+        <button class="hero-card" type="button" data-hero="spiderman" aria-pressed="false"><span class="hero-card-number">03</span><span class="hero-card-prompt"><i data-lucide="mouse-pointer-2"></i> Reveal mission</span><small>Agility · Community</small><h3>Spider-Man</h3></button>
+      </div>
+      <article class="mission-brief reveal" id="project-brief" aria-live="polite"><div><div class="eyebrow" data-editable="mission-kicker">Captain America's mission</div><h3 data-editable="mission-title">Build a shield for your community.</h3><p data-editable="mission-copy">Design a campus safety or peer-support tool that helps students look out for one another. Think trusted alerts, resource maps, and a clear plan of action.</p></div><button class="button register-trigger"><span data-editable="mission-cta">Take on this mission</span><i data-lucide="arrow-up-right"></i></button></article>
+    </section>
+    <section class="section highlights" id="highlights">
+      <div class="section-head reveal"><div><div class="eyebrow">The experience</div><h2>Make it<br>legendary.</h2></div><p class="section-intro">A fan-first event with creative showcases, hands-on builds, and room for every kind of origin story.</p></div>
+      <div class="tab-list reveal" role="tablist" aria-label="Event day highlights"><button class="tab" id="tab-day1" role="tab" aria-selected="true" aria-controls="day1">Saturday · Oct 24</button><button class="tab" id="tab-day2" role="tab" aria-selected="false" aria-controls="day2">Sunday · Oct 25</button></div>
+      <div class="highlight-grid reveal" id="day1" role="tabpanel" aria-labelledby="tab-day1">
+        <article class="highlight-card"><span class="card-no">01</span><span class="card-icon"><i data-lucide="mic-2"></i></span><h3>Hall of heroes</h3><p>Live conversations with the artists and storytellers behind the worlds you love.</p></article>
+        <article class="highlight-card"><span class="card-no">02</span><span class="card-icon"><i data-lucide="palette"></i></span><h3>Artist alley</h3><p>Discover original art, meet independent creators, and take home something one of a kind.</p></article>
+        <article class="highlight-card"><span class="card-no">03</span><span class="card-icon"><i data-lucide="camera"></i></span><h3>Cosplay central</h3><p>Bring your best look, join the parade, and meet your fellow heroes in costume.</p></article>
+      </div>
+      <div class="highlight-grid" id="day2" role="tabpanel" aria-labelledby="tab-day2" hidden>
+        <article class="highlight-card"><span class="card-no">04</span><span class="card-icon"><i data-lucide="clapperboard"></i></span><h3>Origin stories</h3><p>A behind-the-scenes celebration of the moments that made fandom what it is.</p></article>
+        <article class="highlight-card"><span class="card-no">05</span><span class="card-icon"><i data-lucide="gamepad-2"></i></span><h3>Level up</h3><p>Team challenges, interactive worlds, and friendly competition for every generation.</p></article>
+        <article class="highlight-card"><span class="card-no">06</span><span class="card-icon"><i data-lucide="users-round"></i></span><h3>Fan finale</h3><p>Close out the weekend together with a community celebration worthy of the big screen.</p></article>
+      </div>
+    </section>
+    <section class="section schedule" id="schedule">
+      <div class="section-head schedule-head reveal"><div><div class="eyebrow">Event information</div><h2>Coming<br>into focus.</h2></div><div class="tab-list" role="tablist" aria-label="Event information"><button class="tab schedule-tab" id="schedule-tab-1" role="tab" aria-selected="true" aria-controls="schedule-day1">Event flow</button><button class="tab schedule-tab" id="schedule-tab-2" role="tab" aria-selected="false" aria-controls="schedule-day2">What to bring</button></div></div>
+      <div class="schedule-content reveal">
+        <div class="schedule-day active" id="schedule-day1" role="tabpanel" aria-labelledby="schedule-tab-1">
+          <div class="schedule-row"><span class="schedule-time">01</span><div><strong>Opening transmission</strong><small>Welcome + event kickoff · Details TBA</small></div><i data-lucide="radio"></i></div>
+          <div class="schedule-row"><span class="schedule-time">02</span><div><strong>Hero project showcase</strong><small>Student builds + demos · Details TBA</small></div><i data-lucide="presentation"></i></div>
+          <div class="schedule-row"><span class="schedule-time">03</span><div><strong>Build your origin story</strong><small>Interactive challenge · Details TBA</small></div><i data-lucide="code-xml"></i></div>
+          <div class="schedule-row"><span class="schedule-time">04</span><div><strong>Finale + recognition</strong><small>Community celebration · Details TBA</small></div><i data-lucide="sparkles"></i></div>
+        </div>
+        <div class="schedule-day" id="schedule-day2" role="tabpanel" aria-labelledby="schedule-tab-2" hidden>
+          <div class="schedule-row"><span class="schedule-time">01</span><div><strong>Your laptop</strong><small>Bring a charged device for the build challenge</small></div><i data-lucide="laptop"></i></div>
+          <div class="schedule-row"><span class="schedule-time">02</span><div><strong>Your ideas</strong><small>Come solo or bring your project squad</small></div><i data-lucide="lightbulb"></i></div>
+          <div class="schedule-row"><span class="schedule-time">03</span><div><strong>Your campus ID</strong><small>Entry requirements will be confirmed soon</small></div><i data-lucide="id-card"></i></div>
+          <div class="schedule-row"><span class="schedule-time">04</span><div><strong>Your best origin story</strong><small>Cosplay welcome, always optional</small></div><i data-lucide="sparkles"></i></div>
+        </div>
+        <aside class="schedule-aside"><div class="eyebrow">Event details incoming</div><h3>Stay tuned<br>for the call.</h3><p>Exact date, registration link, and event schedule will be announced by the GeeksForGeeks Student Chapter at Bennett University.</p></aside>
+      </div>
+    </section>
+    <section class="cta"><div class="cta-inner reveal"><div><div class="eyebrow">Your place in the story</div><h2 data-editable="cta-title">Answer the call.</h2></div><button class="button register-trigger"><span data-editable="cta-button">Get event updates</span> <i data-lucide="arrow-up-right"></i></button></div></section>
+  </main>
+  <footer><a class="brand" href="#top"><span class="brand-mark"><i data-lucide="zap"></i></span> CAMPUS ASSEMBLE</a><span class="footer-note">A Marvel-inspired student event concept by the GeeksForGeeks Student Chapter, Bennett University. Independent student event; not affiliated with or endorsed by Marvel.</span></footer>
+  <div class="modal-backdrop" role="presentation" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" aria-label="Close registration"><i data-lucide="x"></i></button>
+      <div class="eyebrow">GeeksForGeeks · Bennett University</div><h2 id="modal-title">Get the<br>signal.</h2><p class="modal-copy">Sign up for event updates. We’ll share the date, registration link, and project details when they’re announced.</p>
+      <form id="registration-form">
+        <div class="form-field"><label for="full-name">Your name</label><input id="full-name" name="name" autocomplete="name" required placeholder="Alex Morgan"></div>
+        <div class="form-field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="alex@example.com"></div>
+        <div class="form-field"><label for="pass-type">What are you excited about?</label><select id="pass-type" name="interest" required><option value="" disabled selected>Choose an interest</option><option>Building a project</option><option>Marvel + pop culture</option><option>Meeting the community</option></select></div>
+        <button class="button" type="submit">Join the list <i data-lucide="arrow-right"></i></button>
+        <p class="form-message" role="status">You're on the list. We'll send event updates to your inbox.</p>
+      </form>
+    </section>
+  </div>
+  <button class="edit-site-button" type="button" aria-pressed="false"><i data-lucide="pencil"></i><span>Edit this page</span></button>
+  <aside class="edit-hint" hidden>Edit mode: click outlined text to change it. Your edits stay in this browser.<button class="reset-edits" type="button">Reset page text</button></aside>
+  <script>
+    if (window.lucide) lucide.createIcons();
+
+    const menuButton = document.querySelector('.menu-button');
+    const navLinks = document.querySelector('.nav-links');
+    menuButton.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+      menuButton.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
+    }));
+
+    function connectTabs(buttonSelector, panelSelector) {
+      const buttons = [...document.querySelectorAll(buttonSelector)];
+      buttons.forEach(button => button.addEventListener('click', () => {
+        buttons.forEach(item => item.setAttribute('aria-selected', String(item === button)));
+        document.querySelectorAll(panelSelector).forEach(panel => {
+          const active = panel.id === button.getAttribute('aria-controls');
+          panel.hidden = !active;
+          panel.classList.toggle('active', active);
+        });
+      }));
+    }
+    connectTabs('.tab[aria-controls="day1"], .tab[aria-controls="day2"]', '#day1, #day2');
+    connectTabs('.schedule-tab', '.schedule-day');
+
+    const projectPrompts = {
+      captain: {
+        kicker: "Captain America's mission",
+        title: 'Build a shield for your community.',
+        copy: 'Design a campus safety or peer-support tool that helps students look out for one another. Think trusted alerts, resource maps, and a clear plan of action.'
+      },
+      ironman: {
+        kicker: "Iron Man's mission",
+        title: 'Give campus life an intelligent upgrade.',
+        copy: 'Prototype an AI-powered campus assistant: make it answer student questions, find useful resources, or automate one everyday task with a human-friendly interface.'
+      },
+      spiderman: {
+        kicker: "Spider-Man's mission",
+        title: 'Connect the neighborhood, one web at a time.',
+        copy: 'Create a community platform that connects students to clubs, events, study groups, or volunteering. Make it easy to discover your people and show up.'
+      }
+    };
+    const missionKicker = document.querySelector('[data-editable="mission-kicker"]');
+    const missionTitle = document.querySelector('[data-editable="mission-title"]');
+    const missionCopy = document.querySelector('[data-editable="mission-copy"]');
+    document.querySelectorAll('.hero-card').forEach(card => card.addEventListener('click', () => {
+      const prompt = projectPrompts[card.dataset.hero];
+      if (!prompt) return;
+      document.querySelectorAll('.hero-card').forEach(item => item.setAttribute('aria-pressed', String(item === card)));
+      missionKicker.textContent = prompt.kicker;
+      missionTitle.textContent = prompt.title;
+      missionCopy.textContent = prompt.copy;
+      document.querySelector('#project-brief').animate([{ opacity: .55, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 360, easing: 'ease-out' });
+    }));
+
+    const editButton = document.querySelector('.edit-site-button');
+    const editHint = document.querySelector('.edit-hint');
+    const editableElements = [...document.querySelectorAll('[data-editable]')];
+    const defaultCopy = new Map(editableElements.map(element => [element.dataset.editable, element.textContent]));
+    const copyStorageKey = 'gfg-campus-assemble-copy-v1';
+    function readSavedCopy() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(copyStorageKey) || '{}');
+        editableElements.forEach(element => {
+          if (typeof saved[element.dataset.editable] === 'string') element.textContent = saved[element.dataset.editable];
+        });
+      } catch { /* Local storage may be unavailable for local files. */ }
+    }
+    function saveCopy() {
+      const saved = Object.fromEntries(editableElements.map(element => [element.dataset.editable, element.textContent]));
+      try { localStorage.setItem(copyStorageKey, JSON.stringify(saved)); } catch { /* Editing still works for this page view. */ }
+    }
+    readSavedCopy();
+    editButton.addEventListener('click', () => {
+      const editing = document.body.classList.toggle('editing');
+      editButton.setAttribute('aria-pressed', String(editing));
+      editButton.querySelector('span').textContent = editing ? 'Done editing' : 'Edit this page';
+      editHint.hidden = !editing;
+      editableElements.forEach(element => { element.contentEditable = String(editing); });
+      if (editing) editableElements[0].focus();
+      else saveCopy();
+    });
+    editableElements.forEach(element => element.addEventListener('input', saveCopy));
+    document.querySelector('.reset-edits').addEventListener('click', () => {
+      editableElements.forEach(element => { element.textContent = defaultCopy.get(element.dataset.editable); });
+      try { localStorage.removeItem(copyStorageKey); } catch { /* Ignore unavailable local storage. */ }
+    });
+
+    const backdrop = document.querySelector('.modal-backdrop');
+    const closeButton = document.querySelector('.modal-close');
+    const nameInput = document.querySelector('#full-name');
+    function openModal() {
+      backdrop.classList.add('open');
+      backdrop.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      window.setTimeout(() => nameInput.focus(), 40);
+    }
+    function closeModal() {
+      backdrop.classList.remove('open');
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+    }
+    document.querySelectorAll('.register-trigger').forEach(button => button.addEventListener('click', openModal));
+    closeButton.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', event => { if (event.target === backdrop) closeModal(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && backdrop.classList.contains('open')) closeModal(); });
+    document.querySelector('#registration-form').addEventListener('submit', event => {
+      event.preventDefault();
+      event.currentTarget.querySelector('.form-message').textContent = 'Thanks for your interest. This demo does not yet send registrations; connect the chapter’s registration form before launch.';
+      event.currentTarget.querySelector('.form-message').classList.add('show');
+      event.currentTarget.querySelector('button[type="submit"]').textContent = 'Interest noted';
+    });
+
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    }), { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
+  </script>
+</body>
+</html>
